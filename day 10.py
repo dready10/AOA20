@@ -60,10 +60,10 @@ with open('10input1.txt') as f:
     # the current node through the previous nodes
     for i, adapter in enumerate(adapters[3:]):
         i += 3
-        paths_for_i = paths_to_reach[-1]
-        if(adapters[i] - adapters[i-2]) <= 3:
+        paths_for_i = paths_to_reach[-1] # the current node is always accessible from one node ago
+        if(adapters[i] - adapters[i-2]) <= 3: # is it accessible from two nodes ago?
             paths_for_i += paths_to_reach[i-2]
-        if (adapters[i] - adapters[i-3]) <= 3:
+        if (adapters[i] - adapters[i-3]) <= 3: # how about three?
             paths_for_i += paths_to_reach[i-3]
         paths_to_reach.append(paths_for_i)
 

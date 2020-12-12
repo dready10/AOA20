@@ -37,7 +37,7 @@ with open('12input1.txt') as f:
     print('final position: ' + str(position))
     print('manhattan distance: ' + str(abs(position[0]) + abs(position[1])))
 
-# part 2
+    # part 2
     ship_position = [0, 0]
     waypoint_position = [10, -1]
     

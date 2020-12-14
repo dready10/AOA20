@@ -6,7 +6,7 @@ def generate_addresses(floating_address):
     # for each possible address, go through and switch
     # an X for a 0 or 1. counting up from 0 through 2 ** num_xs
     # will enumerate each possible 0/1 pattern for any number
-    # of Xs
+    # of Xs. (eg, 2 Xs, counting to 4 is 00, 01, 10, 11)
     for i in range(2 ** num_xs):
         X_values_for_i = bin(i)[2:].zfill(num_xs)
         address = ''
@@ -32,14 +32,12 @@ with open('14input1.txt') as f:
             mask1 = int(line[1].replace('X', '1'), 2)
             mask0 = int(line[1].replace('X', '0'), 2)
             continue
-        # apply the mask
+
+        # apply the mask and store in memory
         memory[line[0]] = (int(line[1]) | mask0) & mask1
     
-    total = 0
-    for address in memory.keys():
-        total += memory[address]
-    print(total)
-
+    print(sum(memory.values()))
+    
     # part 2
     f.seek(0)
     memory = {}
@@ -56,10 +54,8 @@ with open('14input1.txt') as f:
         # apply the floating part of the mask
         floating_address = ['X' if bit[0] == 'X' else bit[1] for bit in zip(list(mask), list(address))]
         
+        # store the value in all of the addresses in the floating_address
         for address in generate_addresses(floating_address):
             memory[address] = int(line[1])
 
-    total = 0
-    for key in memory.keys():
-        total += memory[key]
-    print(total)
+    print(sum(memory.values()))

@@ -1,4 +1,19 @@
+# this was the first time i had to use hints to get to 
+# an answer. part 1 worked fine (that solution, almost
+# entirely optimized for speed is below. the biggest
+# slowdown was still list.index, but even without
+# list.index, the array deletes and inserts
+# would have taken about six hours), but part 2. oh no.
+
+# so instead used a hint for a hybrid linked list/map, which
+# was the hint that i found when looking. that way,
+# looking up any particular node is O(1) (on average)
+# and moving cups is also O(1) (on average). still
+# runs awful slow, but it finishes before dinner, so.
 class NodeList:
+    # we need nodes as a data structure to keep
+    # track of the cup value as well as which
+    # cup is next in the circle
     class Node: 
         def __init__(self, value, map):
             self.value = value
@@ -8,7 +23,7 @@ class NodeList:
         def setNext(self, node):
             self.next = node
             self.map[self.value] = self
-    
+
     def __init__(self, nodes):
         self.map = {}
         prev_node = None
@@ -19,18 +34,22 @@ class NodeList:
                 prev_node.setNext(new_node)
             prev_node = new_node
 
-        self.currentCup = self.map[nodes[0]]
-        new_node.setNext(self.currentCup)
+        new_node.setNext(self.currentCup) # link the last element to the first element to form a circle
+        self.currentCup = self.map[nodes[0]] # start at the beginning of the circle
+
 
     def getCurrentCup(self):
         return self.currentCup
     
+    # advances "cursor" in the circle forward one cup
     def nextCup(self):
         self.currentCup = self.currentCup.next
     
     def getNextThreeCupValues(self):
         return [self.currentCup.next.value, self.currentCup.next.next.value, self.currentCup.next.next.next.value]
 
+    # slice three cups after the current cup out of the list and
+    # move them to after the cup specified by nodeId
     def moveNextTreeCupsTo(self, nodeId):
         linkCurrentCupToNode = self.currentCup.next.next.next.next
         insertAtNode = self.map[nodeId]
@@ -42,9 +61,11 @@ class NodeList:
         self.currentCup.setNext(linkCurrentCupToNode)
 
 def play_game(cups, moves, max_cup):
-    for i in range(moves):
+    for _ in range(moves):
         currentCupVal = cups.getCurrentCup().value
         nextThree = cups.getNextThreeCupValues()
+
+        # find where to insert the three cups
         currentCupVal -= 1
         if currentCupVal == 0:
             currentCupVal = max_cup
@@ -52,6 +73,8 @@ def play_game(cups, moves, max_cup):
             currentCupVal -= 1
             if currentCupVal == 0:
                 currentCupVal = max_cup
+
+        # move the cups there and advance the cursor
         cups.moveNextTreeCupsTo(currentCupVal)
         cups.nextCup()
 

@@ -1,3 +1,6 @@
+# nothing mind-blowing here. just operationalizing
+# the text of the problem.
+
 def reverse_modulo(key, subject_message, salt):
     while key % subject_message != 0:
         key += salt
